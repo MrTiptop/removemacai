@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-26
+    # macos-26 is not being assigned a hosted runner, so the job is cancelled
+    # before it starts. macos-15 is an Apple Silicon image and matches the
+    # package's macOS 15.1 minimum.
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
       - name: Build
