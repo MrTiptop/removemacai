@@ -10,9 +10,17 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-26
+    # macos-26 is not being assigned a hosted runner, so the job is cancelled
+    # before it starts. macos-15 is an Apple Silicon image and matches the
+    # package's macOS 15.1 minimum.
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
+      - name: Localization
+        run: |
+          for lang in ru de fr es it pt-BR ja ko zh-Hans hi ur; do
+            python3 tools/check-localization.py "$lang"
+          done
       - name: Build
         run: swift build -c release --arch arm64 -Xswiftc -warnings-as-errors
       - name: Self-test
